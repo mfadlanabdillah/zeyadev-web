@@ -32,7 +32,6 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'employee_id' => 'EMP' . str_pad(static::$employeeCounter++, 3, '0', STR_PAD_LEFT),
-            'role' => 'employee',
         ];
     }
 
