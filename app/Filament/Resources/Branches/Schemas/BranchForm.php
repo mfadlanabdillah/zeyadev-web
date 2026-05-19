@@ -25,7 +25,9 @@ class BranchForm
                 MapPicker::make('coordinates')
                     ->label('Location')
                     ->hiddenLabel()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->dehydrated(false)
+                    ->nullable(),
                 TextInput::make('latitude')
                     ->required()
                     ->numeric()
