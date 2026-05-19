@@ -34,28 +34,39 @@ class LatestAttendanceWidget extends TableWidget
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama')
                     ->searchable()
-                    ->sortable(),
-                    
+                    ->sortable()
+                    ->weight('semibold'),
+
                 Tables\Columns\TextColumn::make('user.employee_id')
-                    ->label('ID Karyawan')
-                    ->searchable(),
-                    
+                    ->label('ID')
+                    ->searchable()
+                    ->badge()
+                    ->color('gray'),
+
                 Tables\Columns\TextColumn::make('check_in_time')
                     ->label('Check-in')
-                    ->dateTime('H:i')
-                    ->sortable(),
-                    
+                    ->dateTime('H:i:s')
+                    ->sortable()
+                    ->icon('heroicon-o-arrow-right-end-on-rectangle')
+                    ->color('success'),
+
                 Tables\Columns\TextColumn::make('check_out_time')
                     ->label('Check-out')
-                    ->dateTime('H:i')
+                    ->dateTime('H:i:s')
                     ->placeholder('-')
-                    ->sortable(),
-                    
+                    ->sortable()
+                    ->icon('heroicon-o-arrow-left-start-on-rectangle')
+                    ->color('danger'),
+
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([
                         'success' => 'on_time',
                         'warning' => 'late',
+                    ])
+                    ->icons([
+                        'heroicon-o-check-circle' => 'on_time',
+                        'heroicon-o-exclamation-triangle' => 'late',
                     ])
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'on_time' => 'Tepat Waktu',
@@ -63,6 +74,8 @@ class LatestAttendanceWidget extends TableWidget
                         default => $state,
                     }),
             ])
-            ->defaultSort('check_in_time', 'desc');
+            ->defaultSort('check_in_time', 'desc')
+            ->striped()
+            ->poll('30s');
     }
 }

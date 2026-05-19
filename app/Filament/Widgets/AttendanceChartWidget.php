@@ -23,21 +23,23 @@ class AttendanceChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-
         $data = collect();
         $labels = collect();
         $lateData = collect();
         $onTimeData = collect();
+        $absentData = collect();
 
         for ($i = 29; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
             $labels->push($date->format('d M'));
 
             $dayAttendance = Attendance::whereDate('attendance_date', $date);
-            $onTimeData->push((clone $dayAttendance)->where('status', 'on_time')->count());
-            $lateData->push((clone $dayAttendance)->where('status', 'late')->count());
-        }
+            $onTime = (clone $dayAttendance)->where('status', 'on_time')->count();
+            $late = (clone $dayAttendance)->where('status', 'late')->count();
 
+            $onTimeData->push($onTime);
+            $lateData->push($late);
+        }
 
         return [
             'labels' => $labels->toArray(),
@@ -45,14 +47,24 @@ class AttendanceChartWidget extends ChartWidget
                 [
                     'label' => 'Tepat Waktu',
                     'data' => $onTimeData->toArray(),
-                    'backgroundColor' => '#10B981', // Green
                     'borderColor' => '#10B981',
+                    'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
+                    'fill' => true,
+                    'tension' => 0.4,
+                    'pointRadius' => 3,
+                    'pointHoverRadius' => 6,
+                    'borderWidth' => 2,
                 ],
                 [
                     'label' => 'Terlambat',
                     'data' => $lateData->toArray(),
-                    'backgroundColor' => '#EF4444', // Red
                     'borderColor' => '#EF4444',
+                    'backgroundColor' => 'rgba(239, 68, 68, 0.1)',
+                    'fill' => true,
+                    'tension' => 0.4,
+                    'pointRadius' => 3,
+                    'pointHoverRadius' => 6,
+                    'borderWidth' => 2,
                 ],
             ],
         ];
@@ -60,6 +72,29 @@ class AttendanceChartWidget extends ChartWidget
 
     protected function getType(): string
     {
-        return 'bar';
+        return 'line';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'plugins' => [
+                'legend' => [
+                    'position' => 'top',
+                ],
+            ],
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                    'ticks' => [
+                        'stepSize' => 1,
+                    ],
+                ],
+            ],
+            'interaction' => [
+                'intersect' => false,
+                'mode' => 'index',
+            ],
+        ];
     }
 }
