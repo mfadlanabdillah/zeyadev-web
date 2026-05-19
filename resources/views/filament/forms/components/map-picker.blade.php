@@ -6,18 +6,6 @@
     style="position: relative;"
 >
     <div x-ref="map" style="height: 400px;"></div>
-
-    <button
-        type="button"
-        @click="getCurrentLocation()"
-        class="absolute bottom-4 right-4 z-[1000] bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-3 py-2 rounded-lg shadow-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
-    >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
-        Use Current Location
-    </button>
 </div>
 
 <script>
@@ -33,8 +21,8 @@ function mapPicker() {
             const container = this.$refs.map
             if (!container) return
 
-            const latInput = this.$root.parentElement.querySelector('[data-field-name="latitude"] input, input[name*="latitude"]')
-            const lngInput = this.$root.parentElement.querySelector('[data-field-name="longitude"] input, input[name*="longitude"]')
+            const latInput = document.querySelector('[data-field-name="latitude"] input')
+            const lngInput = document.querySelector('[data-field-name="longitude"] input')
 
             const defaultLat = latInput ? parseFloat(latInput.value) || -6.200000 : -6.200000
             const defaultLng = lngInput ? parseFloat(lngInput.value) || 106.845000 : 106.845000
@@ -59,7 +47,10 @@ function mapPicker() {
 
             this.map.on('click', (e) => {
                 const { lat, lng } = e.latlng
-                this.updateInputs(lat, lng)
+                if (latInput) latInput.value = lat
+                if (lngInput) lngInput.value = lng
+                latInput?.dispatchEvent(new Event('input', { bubbles: true }))
+                lngInput?.dispatchEvent(new Event('input', { bubbles: true }))
 
                 if (this.marker) {
                     this.marker.setLatLng([lat, lng])
@@ -69,51 +60,14 @@ function mapPicker() {
 
                 this.marker.on('dragend', () => {
                     const pos = this.marker.getLatLng()
-                    this.updateInputs(pos.lat, pos.lng)
+                    if (latInput) latInput.value = pos.lat
+                    if (lngInput) lngInput.value = pos.lng
+                    latInput?.dispatchEvent(new Event('input', { bubbles: true }))
+                    lngInput?.dispatchEvent(new Event('input', { bubbles: true }))
                 })
             })
 
             setTimeout(() => this.map.invalidateSize(), 200)
-        },
-        updateInputs(lat, lng) {
-            const latInput = this.$root.parentElement.querySelector('[data-field-name="latitude"] input, input[name*="latitude"]')
-            const lngInput = this.$root.parentElement.querySelector('[data-field-name="longitude"] input, input[name*="longitude"]')
-
-            if (latInput) {
-                latInput.value = lat.toFixed(8)
-                latInput.dispatchEvent(new Event('input', { bubbles: true }))
-                latInput.dispatchEvent(new Event('change', { bubbles: true }))
-            }
-            if (lngInput) {
-                lngInput.value = lng.toFixed(8)
-                lngInput.dispatchEvent(new Event('input', { bubbles: true }))
-                lngInput.dispatchEvent(new Event('change', { bubbles: true }))
-            }
-        },
-        getCurrentLocation() {
-            if (!navigator.geolocation) {
-                alert('Geolocation is not supported by your browser')
-                return
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const lat = position.coords.latitude
-                    const lng = position.coords.longitude
-                    this.map.setView([lat, lng], 16)
-
-                    if (this.marker) {
-                        this.marker.setLatLng([lat, lng])
-                    } else {
-                        this.marker = L.marker([lat, lng], { draggable: true }).addTo(this.map)
-                    }
-
-                    this.updateInputs(lat, lng)
-                },
-                (error) => {
-                    alert('Unable to get your location: ' + error.message)
-                }
-            )
         }
     }
 }
