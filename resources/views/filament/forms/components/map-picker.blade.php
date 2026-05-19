@@ -33,9 +33,8 @@ function mapPicker() {
             const container = this.$refs.map
             if (!container) return
 
-            const form = container.closest('form') || document.body
-            const latInput = form.querySelector('input[name*="latitude"]') || document.querySelector('input[name*="latitude"]')
-            const lngInput = form.querySelector('input[name*="longitude"]') || document.querySelector('input[name*="longitude"]')
+            const latInput = this.$root.parentElement.querySelector('[data-field-name="latitude"] input, input[name*="latitude"]')
+            const lngInput = this.$root.parentElement.querySelector('[data-field-name="longitude"] input, input[name*="longitude"]')
 
             const defaultLat = latInput ? parseFloat(latInput.value) || -6.200000 : -6.200000
             const defaultLng = lngInput ? parseFloat(lngInput.value) || 106.845000 : 106.845000
@@ -77,9 +76,8 @@ function mapPicker() {
             setTimeout(() => this.map.invalidateSize(), 200)
         },
         updateInputs(lat, lng) {
-            const form = this.$refs.map.closest('form') || document.body
-            const latInput = form.querySelector('input[name*="latitude"]') || document.querySelector('input[name*="latitude"]')
-            const lngInput = form.querySelector('input[name*="longitude"]') || document.querySelector('input[name*="longitude"]')
+            const latInput = this.$root.parentElement.querySelector('[data-field-name="latitude"] input, input[name*="latitude"]')
+            const lngInput = this.$root.parentElement.querySelector('[data-field-name="longitude"] input, input[name*="longitude"]')
 
             if (latInput) {
                 latInput.value = lat.toFixed(8)
