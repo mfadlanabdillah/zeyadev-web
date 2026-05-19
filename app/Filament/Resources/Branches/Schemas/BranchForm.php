@@ -2,13 +2,11 @@
 
 namespace App\Filament\Resources\Branches\Schemas;
 
-use App\Filament\Forms\Components\MapPicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
-use Filament\Support\RawJs;
 
 class BranchForm
 {
@@ -22,26 +20,12 @@ class BranchForm
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('address'),
-                MapPicker::make('coordinates')
-                    ->label('Location')
-                    ->hiddenLabel()
-                    ->columnSpanFull()
-                    ->dehydrated(false)
-                    ->nullable(),
                 TextInput::make('latitude')
                     ->required()
-                    ->numeric()
-                    ->live()
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        $set('coordinates', $state);
-                    }),
+                    ->numeric(),
                 TextInput::make('longitude')
                     ->required()
-                    ->numeric()
-                    ->live()
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        $set('coordinates', $state);
-                    }),
+                    ->numeric(),
                 TextInput::make('radius')
                     ->required()
                     ->numeric()
@@ -62,11 +46,6 @@ class BranchForm
                     ->label('Require Face Recognition')
                     ->inline(false)
                     ->default(true),
-            ])
-            ->columns(2)
-            ->extraAttributes([
-                'x-data' => '{ leafletCssLoaded: false }',
-                'x-init' => "if (!document.querySelector('link[href*=\"leaflet\"]')) { const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'; document.head.appendChild(link); }",
             ]);
     }
 }
