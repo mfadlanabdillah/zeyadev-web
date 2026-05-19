@@ -61,10 +61,6 @@ class BranchForm
                     ->inline(false)
                     ->default(true),
             ])
-            ->columns(2)
-            ->extraAttributes([
-                'x-data' => '{ leafletCssLoaded: false }',
-                'x-init' => "if (!document.querySelector('link[href*=\"leaflet\"]')) { const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'; document.head.appendChild(link); }",
-            ]);
+            ->columns(2);
     }
 }
