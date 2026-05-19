@@ -2,10 +2,9 @@
     :component="$getFieldWrapperView()"
     :field="$field"
 >
-    <style>
-        .leaflet-map-container { position: relative; overflow: hidden; }
-        .leaflet-map-container .leaflet-container { position: relative !important; }
-    </style>
+    @pushonce('leaflet-css')
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    @endpushonce
 
     <div
         x-data="{
@@ -65,8 +64,13 @@
         }"
         x-init="init()"
         wire:ignore
-        class="leaflet-map-container rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
+        class="relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
+        style="z-index: 1;"
     >
-        <div x-ref="map" class="h-96 w-full"></div>
+        <div x-ref="map" class="h-96 w-full" style="z-index: 1;"></div>
     </div>
+
+    @push('scripts')
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    @endpush
 </x-dynamic-component>
