@@ -9,6 +9,8 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
+use Filament\Support\Assets\Css;
+use Filament\Support\Assets\Js;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -54,6 +56,10 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 ForceHttps::class,
+            ])
+            ->assets([
+                Css::make('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'),
+                Js::make('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
