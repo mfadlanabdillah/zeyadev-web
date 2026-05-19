@@ -20,6 +20,12 @@ class AttendanceMap extends Page
 
     public ?string $filterDate = null;
 
+    public int $totalAttendanceToday = 0;
+
+    public int $onTimeCount = 0;
+
+    public int $lateCount = 0;
+
     public function mount(): void
     {
         $this->filterDate = request('date', Carbon::today()->format('Y-m-d'));
@@ -40,6 +46,10 @@ class AttendanceMap extends Page
         }
 
         $attendances = $query->get();
+
+        $this->totalAttendanceToday = $attendances->count();
+        $this->onTimeCount = $attendances->where('status', 'on_time')->count();
+        $this->lateCount = $attendances->where('status', 'late')->count();
 
         $this->markers = $attendances
             ->filter(fn ($a) => $a->check_in_latitude && $a->check_in_longitude)
