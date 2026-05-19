@@ -2,6 +2,10 @@
     :component="$getFieldWrapperView()"
     :field="$field"
 >
+    @pushonce('leaflet-css')
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    @endpushonce
+
     <div
         x-data="{
             state: $wire.$entangle('{{ $getStatePath() }}'),
@@ -11,14 +15,6 @@
             marker: null,
             leafletLoaded: false,
             init() {
-                const cssLoaded = document.querySelector('link[href*=\"leaflet\"]')
-                if (!cssLoaded) {
-                    const link = document.createElement('link')
-                    link.rel = 'stylesheet'
-                    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
-                    document.head.appendChild(link)
-                }
-
                 if (typeof L !== 'undefined') {
                     this.leafletLoaded = true
                     this.initMap()
@@ -33,8 +29,6 @@
                 }
             },
             initMap() {
-                if (this.map) return
-
                 const defaultLat = this.lat || -6.200000
                 const defaultLng = this.lng || 106.845000
 
