@@ -4,7 +4,6 @@ namespace App\Filament\Pages;
 
 use App\Models\Attendance;
 use Carbon\Carbon;
-use Filament\Facades\Filament;
 use BackedEnum;
 use Filament\Pages\Page;
 
