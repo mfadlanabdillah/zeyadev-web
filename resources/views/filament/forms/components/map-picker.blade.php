@@ -1,6 +1,6 @@
 <div
     x-data="mapPicker()"
-    x-init="init()"
+    x-init="init($refs.map)"
     wire:ignore
     class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
     style="position: relative;"
@@ -14,12 +14,9 @@ function mapPicker() {
         map: null,
         marker: null,
         initialized: false,
-        init() {
+        init(container) {
             if (this.initialized || typeof L === 'undefined') return
             this.initialized = true
-
-            const container = this.$refs.map
-            if (!container) return
 
             const latInput = document.querySelector('[data-field-name="latitude"] input')
             const lngInput = document.querySelector('[data-field-name="longitude"] input')
