@@ -2,43 +2,22 @@
     :component="$getFieldWrapperView()"
     :field="$field"
 >
+    @pushonce('leaflet-css')
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    @endpushonce
+
     <div
         x-data="{
-            state: $wire.$entangle('{{ $getStatePath() }}'),
-            lat: $wire.$entangle('{{ $getStatePath('latitude') }}'),
-            lng: $wire.$entangle('{{ $getStatePath('longitude') }}'),
+            state: @entangle($getStatePath()),
+            lat: @entangle($getStatePath('latitude')),
+            lng: @entangle($getStatePath('longitude')),
             map: null,
             marker: null,
-            leafletLoaded: false,
             init() {
-                const cssLoaded = document.querySelector('link[href*=\"leaflet\"]')
-                if (!cssLoaded) {
-                    const link = document.createElement('link')
-                    link.rel = 'stylesheet'
-                    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
-                    document.head.appendChild(link)
-                }
-
-                if (typeof L !== 'undefined') {
-                    this.leafletLoaded = true
-                    this.initMap()
-                } else {
-                    const script = document.createElement('script')
-                    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
-                    script.onload = () => {
-                        this.leafletLoaded = true
-                        this.initMap()
-                    }
-                    document.head.appendChild(script)
-                }
-            },
-            initMap() {
-                if (this.map) return
-
                 const defaultLat = this.lat || -6.200000
                 const defaultLng = this.lng || 106.845000
 
-                this.map = L.map($refs.map).setView([defaultLat, defaultLng], 13)
+                this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13)
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
@@ -52,7 +31,7 @@
                     const { lat, lng } = e.latlng
                     this.lat = lat
                     this.lng = lng
-                    this.state = `${lat}, ${lng}`
+                    this.state = lat + ', ' + lng
 
                     if (this.marker) {
                         this.marker.setLatLng([lat, lng])
@@ -64,7 +43,7 @@
                         const pos = this.marker.getLatLng()
                         this.lat = pos.lat
                         this.lng = pos.lng
-                        this.state = `${pos.lat}, ${pos.lng}`
+                        this.state = pos.lat + ', ' + pos.lng
                     })
                 })
 
@@ -77,4 +56,8 @@
     >
         <div x-ref="map" class="h-96 w-full"></div>
     </div>
+
+    @push('scripts')
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    @endpush
 </x-dynamic-component>
