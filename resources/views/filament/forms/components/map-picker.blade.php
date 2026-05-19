@@ -13,20 +13,9 @@
             lng: @entangle($getStatePath('longitude')),
             map: null,
             marker: null,
-            initialized: false,
             init() {
-                if (this.initialized) return
-                this.initialized = true
-
                 const defaultLat = this.lat || -6.200000
                 const defaultLng = this.lng || 106.845000
-
-                delete L.Icon.Default.prototype._getIconUrl
-                L.Icon.Default.mergeOptions({
-                    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-                    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-                    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
-                })
 
                 this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13)
 
