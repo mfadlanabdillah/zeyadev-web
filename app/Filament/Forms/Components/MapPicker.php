@@ -7,4 +7,11 @@ use Filament\Forms\Components\Field;
 class MapPicker extends Field
 {
     protected string $view = 'filament.forms.components.map-picker';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->dehydrated(false);
+    }
 }
