@@ -28,8 +28,7 @@
                     shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
                 })
 
-                this.map = L.map(this.$refs.map, { zoomControl: false }).setView([defaultLat, defaultLng], 13)
-                L.control.zoom({ position: 'topright' }).addTo(this.map)
+                this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13)
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
@@ -59,15 +58,14 @@
                     })
                 })
 
-                setTimeout(() => this.map.invalidateSize(), 200)
+                setTimeout(() => this.map.invalidateSize(), 100)
             }
         }"
         x-init="init()"
         wire:ignore
-        class="relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
-        style="z-index: 1;"
+        class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
     >
-        <div x-ref="map" class="h-96 w-full" style="z-index: 1;"></div>
+        <div x-ref="map" class="h-96 w-full"></div>
     </div>
 
     @push('scripts')
