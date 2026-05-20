@@ -12,7 +12,7 @@ class AttendanceMap extends Page
 {
     protected static string $resource = AttendanceResource::class;
 
-    protected static string $view = 'filament.resources.attendances.pages.attendance-map';
+    protected string $view = 'filament.resources.attendances.pages.attendance-map';
 
     public function getAttendances(): Collection
     {
