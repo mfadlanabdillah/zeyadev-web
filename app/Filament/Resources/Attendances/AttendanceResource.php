@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Attendances;
 
+use App\Filament\Resources\Attendances\Pages\AttendanceMap;
 use App\Filament\Resources\Attendances\Pages\CreateAttendance;
 use App\Filament\Resources\Attendances\Pages\EditAttendance;
 use App\Filament\Resources\Attendances\Pages\ListAttendances;
@@ -45,6 +46,7 @@ class AttendanceResource extends Resource
             'index' => ListAttendances::route('/'),
             'create' => CreateAttendance::route('/create'),
             'edit' => EditAttendance::route('/{record}/edit'),
+            'map' => AttendanceMap::route('/map'),
         ];
     }
 
