@@ -54,14 +54,9 @@
                 </div>
                 <span class="text-xs text-gray-500 dark:text-gray-400">{{ count($markers) }} lokasi</span>
             </div>
-            <div
-                id="attendance-map"
-                class="w-full"
-                style="height: 480px;"
-                wire:key="map-{{ $filterDate }}"
-                x-data="attendanceMap(@js($markers))"
-                x-init="init()"
-            ></div>
+            <div id="attendance-map" class="w-full" style="height: 480px;"></div>
+
+    <script id="attendance-map-data" type="application/json">@json($markers)</script>
         </div>
 
         @if (count($markers) > 0)
@@ -114,59 +109,66 @@
     </style>
 
     <script>
-    function attendanceMap(data) {
-        return {
-            map: null,
-            markers: [],
-            init() {
-                if (typeof L === 'undefined') return
+    let attendanceMapInstance = null
+    let attendanceMapMarkers = []
 
-                const el = document.getElementById('attendance-map')
-                if (!el) return
+    document.addEventListener('livewire:navigated', initAttendanceMap)
+    if (document.readyState !== 'loading') setTimeout(initAttendanceMap, 100)
 
-                if (!data || !data.length) {
-                    el.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Belum ada data untuk tanggal ini</p></div>'
-                    return
-                }
+    function initAttendanceMap() {
+        if (typeof L === 'undefined') return
 
-                this.map = L.map('attendance-map').setView([-6.2, 106.82], 12)
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(this.map)
-                this.markers = []
+        const el = document.getElementById('attendance-map')
+        if (!el) return
 
-                data.forEach(function(attendance) {
-                    const lat = parseFloat(attendance.check_in_latitude)
-                    const lng = parseFloat(attendance.check_in_longitude)
-                    if (isNaN(lat) || isNaN(lng)) return
-                    const isOn = attendance.status === 'on_time'
-                    const color = isOn ? '#10B981' : '#EF4444'
+        let data = []
+        try {
+            const script = document.getElementById('attendance-map-data')
+            data = script ? JSON.parse(script.textContent) : []
+        } catch(e) { data = [] }
 
-                    const icon = L.divIcon({
-                        html: `<div style="width:24px;height:24px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
-                        iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -16], className: ''
-                    })
-
-                    const marker = L.marker([lat, lng], { icon }).addTo(this.map)
-                    this.markers.push(marker)
-                    marker.bindPopup('<strong>' + (attendance.user?.name || '') + '</strong><br>Check-in: ' + (attendance.check_in_time ? new Date(attendance.check_in_time).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : '-') + '<br>' + (isOn ? 'Tepat Waktu' : 'Terlambat'))
-                }.bind(this))
-
-                if (this.markers.length) {
-                    const group = L.featureGroup(this.markers)
-                    this.map.fitBounds(group.getBounds().pad(0.1))
-                }
-                this.map.invalidateSize()
-            }
+        if (attendanceMapInstance) {
+            attendanceMapInstance.remove()
+            attendanceMapInstance = null
         }
+        attendanceMapMarkers = []
+
+        if (!data || !data.length) {
+            el.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Belum ada data untuk tanggal ini</p></div>'
+            return
+        }
+
+        attendanceMapInstance = L.map('attendance-map').setView([-6.2, 106.82], 12)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(attendanceMapInstance)
+
+        data.forEach(function(attendance) {
+            const lat = parseFloat(attendance.check_in_latitude)
+            const lng = parseFloat(attendance.check_in_longitude)
+            if (isNaN(lat) || isNaN(lng)) return
+            const isOn = attendance.status === 'on_time'
+            const color = isOn ? '#10B981' : '#EF4444'
+
+            const icon = L.divIcon({
+                html: `<div style="width:24px;height:24px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
+                iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -16], className: ''
+            })
+
+            const marker = L.marker([lat, lng], { icon }).addTo(attendanceMapInstance)
+            attendanceMapMarkers.push(marker)
+            marker.bindPopup('<strong>' + (attendance.user?.name || '') + '</strong><br>Check-in: ' + (attendance.check_in_time ? new Date(attendance.check_in_time).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : '-') + '<br>' + (isOn ? 'Tepat Waktu' : 'Terlambat'))
+        })
+
+        if (attendanceMapMarkers.length) {
+            const group = L.featureGroup(attendanceMapMarkers)
+            attendanceMapInstance.fitBounds(group.getBounds().pad(0.1))
+        }
+        attendanceMapInstance.invalidateSize()
     }
 
     function flyToMarker(lat, lng) {
-        const el = document.getElementById('attendance-map')
-        if (!el) return
-        const alpine = Alpine.$data(el)
-        if (alpine.map) {
-            alpine.map.flyTo([lat, lng], 17, { duration: 0.8 })
-            alpine.markers.forEach(m => { if (m.getLatLng().lat === lat && m.getLatLng().lng === lng) m.openPopup() })
-        }
+        if (!attendanceMapInstance) return
+        attendanceMapInstance.flyTo([lat, lng], 17, { duration: 0.8 })
+        attendanceMapMarkers.forEach(m => { if (m.getLatLng().lat === lat && m.getLatLng().lng === lng) m.openPopup() })
     }
     </script>
 </x-filament-panels::page>
