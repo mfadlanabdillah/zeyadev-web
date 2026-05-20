@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        
+        $this->call(RoleSeeder::class);
+
         // Create default company
         $company = Company::create([
             'name' => 'Zeyadev HQ',
@@ -41,7 +42,8 @@ class DatabaseSeeder extends Seeder
         $users = User::factory()
             ->count(10)
             ->state(['branch_id' => $branch->id])
-            ->create();
+            ->create()
+            ->each(fn ($user) => $user->assignRole('employee'));
 
         // Generate attendance data for each user for the last 30 days
         $startDate = Carbon::now()->subDays(30);
