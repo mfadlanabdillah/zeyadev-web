@@ -37,9 +37,9 @@
                 id="attendance-map"
                 class="w-full"
                 style="height: 480px;"
-                wire:ignore
-                x-data="attendanceMap()"
-                x-init="init(@js($markers))"
+                wire:key="map-{{ $filterDate }}"
+                x-data="attendanceMap(@js($markers))"
+                x-init="init()"
             ></div>
         </div>
 
@@ -88,16 +88,15 @@
     </style>
 
     <script>
-    function attendanceMap() {
+    function attendanceMap(data) {
         return {
             map: null,
             markers: [],
-            init(data) {
+            init() {
                 if (typeof L === 'undefined') return
 
                 const el = document.getElementById('attendance-map')
                 if (!el) return
-                if (this.map) { this.map.remove(); this.map = null }
 
                 if (!data || !data.length) {
                     el.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Belum ada data untuk tanggal ini</p></div>'
@@ -135,12 +134,12 @@
     }
 
     function flyToMarker(lat, lng) {
-        const component = document.querySelector('[x-data="attendanceMap()"]')
-        if (!component) return
-        const data = Alpine.$data(component)
-        if (data.map) {
-            data.map.flyTo([lat, lng], 17, { duration: 0.8 })
-            data.markers.forEach(m => { if (m.getLatLng().lat === lat && m.getLatLng().lng === lng) m.openPopup() })
+        const el = document.getElementById('attendance-map')
+        if (!el) return
+        const alpine = Alpine.$data(el)
+        if (alpine.map) {
+            alpine.map.flyTo([lat, lng], 17, { duration: 0.8 })
+            alpine.markers.forEach(m => { if (m.getLatLng().lat === lat && m.getLatLng().lng === lng) m.openPopup() })
         }
     }
     </script>
