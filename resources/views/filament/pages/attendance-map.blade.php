@@ -33,7 +33,14 @@
         </div>
 
         <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
-            <div id="attendance-map" class="w-full" style="height: 480px;"></div>
+            <div
+                id="attendance-map"
+                class="w-full"
+                style="height: 480px;"
+                wire:ignore
+                x-data="attendanceMap()"
+                x-init="init(@js($markers))"
+            ></div>
         </div>
 
         @if (count($markers) > 0)
@@ -73,70 +80,68 @@
         @endif
     </div>
 
-    @push('styles')
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         #attendance-map .leaflet-popup-content { margin: 12px 16px; font-size: 13px; line-height: 1.6; }
         #attendance-map .leaflet-popup-content strong { display: block; font-size: 14px; margin-bottom: 4px; }
         .dark #attendance-map .leaflet-popup-content-wrapper { background: #1f2937; color: #d1d5db; }
         .dark #attendance-map .leaflet-popup-tip { background: #1f2937; }
     </style>
-    @endpush
 
-    @push('scripts')
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        document.addEventListener('livewire:navigated', () => {
-            const data = @json($markers);
-            initMap(data);
-        });
+    function attendanceMap() {
+        return {
+            map: null,
+            markers: [],
+            init(data) {
+                if (typeof L === 'undefined') return
 
-        let map;
-        let markers = [];
+                const el = document.getElementById('attendance-map')
+                if (!el) return
+                if (this.map) { this.map.remove(); this.map = null }
 
-        function initMap(data) {
-            const el = document.getElementById('attendance-map');
-            if (!el) return;
-            if (map) { map.remove(); map = null; }
-            if (!data.length) {
-                el.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Belum ada data untuk tanggal ini</p></div>';
-                return;
-            }
+                if (!data || !data.length) {
+                    el.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Belum ada data untuk tanggal ini</p></div>'
+                    return
+                }
 
-            map = L.map('attendance-map').setView([-6.2, 106.82], 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-            markers = [];
+                this.map = L.map('attendance-map').setView([-6.2, 106.82], 12)
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(this.map)
+                this.markers = []
 
-            data.forEach(function(attendance) {
-                const lat = parseFloat(attendance.check_in_latitude);
-                const lng = parseFloat(attendance.check_in_longitude);
-                if (isNaN(lat) || isNaN(lng)) return;
-                const isOn = attendance.status === 'on_time';
-                const color = isOn ? '#10B981' : '#EF4444';
+                data.forEach(function(attendance) {
+                    const lat = parseFloat(attendance.check_in_latitude)
+                    const lng = parseFloat(attendance.check_in_longitude)
+                    if (isNaN(lat) || isNaN(lng)) return
+                    const isOn = attendance.status === 'on_time'
+                    const color = isOn ? '#10B981' : '#EF4444'
 
-                const icon = L.divIcon({
-                    html: `<div style="width:24px;height:24px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
-                    iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -16], className: ''
-                });
+                    const icon = L.divIcon({
+                        html: `<div style="width:24px;height:24px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
+                        iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -16], className: ''
+                    })
 
-                const marker = L.marker([lat, lng], { icon }).addTo(map);
-                markers.push(marker);
-                marker.bindPopup(`<strong>${attendance.user?.name || ''}</strong><br>Check-in: ${attendance.check_in_time ? new Date(attendance.check_in_time).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : '-'}<br>${isOn ? '✅ Tepat Waktu' : '⚠️ Terlambat'}`);
-            });
+                    const marker = L.marker([lat, lng], { icon }).addTo(this.map)
+                    this.markers.push(marker)
+                    marker.bindPopup(`<strong>${attendance.user?.name || ''}</strong><br>Check-in: ${attendance.check_in_time ? new Date(attendance.check_in_time).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : '-'}<br>${isOn ? '✅ Tepat Waktu' : '⚠️ Terlambat'}`)
+                }.bind(this))
 
-            if (markers.length) {
-                const group = L.featureGroup(markers);
-                map.fitBounds(group.getBounds().pad(0.1));
-            }
-            map.invalidateSize();
-        }
-
-        function flyToMarker(lat, lng) {
-            if (map) {
-                map.flyTo([lat, lng], 17, { duration: 0.8 });
-                markers.forEach(m => { if (m.getLatLng().lat === lat && m.getLatLng().lng === lng) m.openPopup(); });
+                if (this.markers.length) {
+                    const group = L.featureGroup(this.markers)
+                    this.map.fitBounds(group.getBounds().pad(0.1))
+                }
+                this.map.invalidateSize()
             }
         }
+    }
+
+    function flyToMarker(lat, lng) {
+        const component = document.querySelector('[x-data="attendanceMap()"]')
+        if (!component) return
+        const data = Alpine.$data(component)
+        if (data.map) {
+            data.map.flyTo([lat, lng], 17, { duration: 0.8 })
+            data.markers.forEach(m => { if (m.getLatLng().lat === lat && m.getLatLng().lng === lng) m.openPopup() })
+        }
+    }
     </script>
-    @endpush
 </x-filament-panels::page>
