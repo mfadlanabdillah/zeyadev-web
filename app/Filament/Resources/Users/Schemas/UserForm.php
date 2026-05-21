@@ -44,7 +44,6 @@ class UserForm
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->minItems(1)
-                    ->maxItems(1)
                     ->required()
                     ->preload(),
             ]);
