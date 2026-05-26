@@ -33,7 +33,12 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#181d26'),
+                'danger' => Color::hex('#aa2d00'),
+                'success' => Color::hex('#006400'),
+                'info' => Color::hex('#254fad'),
+                'warning' => Color::hex('#d9a441'),
+                'gray' => Color::hex('#333840'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -60,12 +65,15 @@ class AdminPanelProvider extends PanelProvider
             ->assets([
                 Css::make('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'),
                 Js::make('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'),
+                Css::make('admin-theme', resource_path('css/admin.css')),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->font('Inter')
+            ->viteTheme('resources/css/filament/admin/theme.css');
     }
 }
