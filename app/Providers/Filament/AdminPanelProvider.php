@@ -65,7 +65,6 @@ class AdminPanelProvider extends PanelProvider
             ->assets([
                 Css::make('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'),
                 Js::make('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'),
-                Css::make('admin-theme', resource_path('css/admin.css')),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
