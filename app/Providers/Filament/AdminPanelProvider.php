@@ -72,7 +72,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->font('Inter')
-            ->viteTheme('resources/css/filament/admin/theme.css');
+            ->font('Inter');
     }
 }
