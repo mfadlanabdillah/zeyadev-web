@@ -3,67 +3,77 @@
 ?>
 
 <div class="space-y-6">
-    {{-- Stats Bar — like Airtable's hero-band --}}
-    <div class="grid grid-cols-3 gap-4">
-        <div class="bg-canvas rounded-lg border border-hairline p-5">
-            <p class="text-xs font-semibold text-muted uppercase tracking-wider">Total Absensi</p>
-            <p class="mt-2 text-3xl font-normal text-ink tracking-tight">{{ $totalAttendanceToday }}</p>
-            <div class="mt-3 flex items-center gap-2 text-xs text-muted">
-                <span class="inline-block w-2 h-2 rounded-full bg-gray-400"></span>
-                <span>{{ count($markers) }} with location</span>
+    {{-- Editorial stats row — signature accent bars --}}
+    <div class="grid grid-cols-3 gap-5">
+        <div class="relative bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="absolute inset-x-0 top-0 h-1" style="background-color: #181d26;"></div>
+            <div class="p-5">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Absensi</p>
+                <p class="mt-2 text-3xl font-normal text-gray-900 tracking-tight">{{ $totalAttendanceToday }}</p>
+                <div class="mt-3 flex items-center gap-2 text-xs text-gray-400">
+                    <span class="inline-block w-2 h-2 rounded-full bg-gray-400"></span>
+                    <span>{{ count($markers) }} with location</span>
+                </div>
             </div>
         </div>
-        <div class="bg-canvas rounded-lg border border-hairline p-5">
-            <p class="text-xs font-semibold text-muted uppercase tracking-wider">Tepat Waktu</p>
-            <p class="mt-2 text-3xl font-normal text-ink tracking-tight">{{ $onTimeCount }}</p>
-            <div class="mt-3 flex items-center gap-2 text-xs text-muted">
-                <span class="inline-block w-2 h-2 rounded-full" style="background-color: #006400;"></span>
-                <span>{{ $totalAttendanceToday > 0 ? round(($onTimeCount / max($totalAttendanceToday, 1)) * 100) : 0 }}% on time</span>
+        <div class="relative bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="absolute inset-x-0 top-0 h-1" style="background-color: #006400;"></div>
+            <div class="p-5">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tepat Waktu</p>
+                <p class="mt-2 text-3xl font-normal text-gray-900 tracking-tight">{{ $onTimeCount }}</p>
+                <div class="mt-3 flex items-center gap-2 text-xs text-gray-400">
+                    <span class="inline-block w-2 h-2 rounded-full" style="background-color: #006400;"></span>
+                    <span>{{ $totalAttendanceToday > 0 ? round(($onTimeCount / max($totalAttendanceToday, 1)) * 100) : 0 }}% on time</span>
+                </div>
             </div>
         </div>
-        <div class="bg-canvas rounded-lg border border-hairline p-5">
-            <p class="text-xs font-semibold text-muted uppercase tracking-wider">Terlambat</p>
-            <p class="mt-2 text-3xl font-normal text-ink tracking-tight">{{ $lateCount }}</p>
-            <div class="mt-3 flex items-center gap-2 text-xs text-muted">
-                <span class="inline-block w-2 h-2 rounded-full" style="background-color: #aa2d00;"></span>
-                <span>{{ $totalAttendanceToday > 0 ? round(($lateCount / max($totalAttendanceToday, 1)) * 100) : 0 }}% late</span>
+        <div class="relative bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="absolute inset-x-0 top-0 h-1" style="background-color: #aa2d00;"></div>
+            <div class="p-5">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Terlambat</p>
+                <p class="mt-2 text-3xl font-normal text-gray-900 tracking-tight">{{ $lateCount }}</p>
+                <div class="mt-3 flex items-center gap-2 text-xs text-gray-400">
+                    <span class="inline-block w-2 h-2 rounded-full" style="background-color: #aa2d00;"></span>
+                    <span>{{ $totalAttendanceToday > 0 ? round(($lateCount / max($totalAttendanceToday, 1)) * 100) : 0 }}% late</span>
+                </div>
             </div>
         </div>
     </div>
 
-    {{-- Date filter bar --}}
-    <div class="flex items-center justify-between py-2">
-        <div class="flex items-center gap-3">
-            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100">
-                <svg class="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    {{-- Editorial date filter bar --}}
+    <div class="relative bg-white rounded-lg border border-gray-200 px-5 py-4 flex items-center justify-between">
+        <div class="absolute inset-y-0 left-0 w-0.5" style="background-color: #fcab79;"></div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full" style="background-color: #f5e9d4;">
+                <svg class="w-5 h-5" style="color: #aa2d00;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
                 </svg>
             </div>
             <div>
-                <p class="text-sm font-medium text-ink">Peta Absensi</p>
-                <p class="text-xs text-muted">{{ \Carbon\Carbon::parse($filterDate)->locale('id')->translatedFormat('l, d F Y') }}</p>
+                <p class="text-sm font-medium text-gray-900">Peta Absensi</p>
+                <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($filterDate)->locale('id')->translatedFormat('l, d F Y') }}</p>
             </div>
         </div>
         <div>
             <input type="date" wire:model.live="filterDate" value="{{ $filterDate }}"
-                   class="appearance-none bg-canvas border border-hairline rounded-sm px-4 py-2.5 text-sm text-ink font-medium focus:border-info-border focus:ring-2 focus:ring-info-border/20 transition-colors"
+                   class="appearance-none bg-white border border-gray-200 rounded-md px-4 py-2.5 text-sm text-gray-900 font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
                    style="height: 44px;">
         </div>
     </div>
 
     {{-- Map card --}}
-    <div class="bg-canvas rounded-lg border border-hairline overflow-hidden">
-        <div class="flex items-center justify-between px-5 py-3 border-b border-hairline">
-            <div class="flex items-center gap-4 text-xs text-muted">
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
+            <div class="flex items-center gap-4 text-xs text-gray-400">
                 <span class="flex items-center gap-1.5">
-                    <span class="inline-block w-2.5 h-2.5 rounded-full" style="background-color: #006400;"></span> On Time
+                    <span class="inline-block w-2.5 h-2.5 rounded-full" style="background-color: #006400;"></span> Tepat Waktu
                 </span>
-                <span class="text-hairline">|</span>
+                <span class="text-gray-200">|</span>
                 <span class="flex items-center gap-1.5">
-                    <span class="inline-block w-2.5 h-2.5 rounded-full" style="background-color: #aa2d00;"></span> Late
+                    <span class="inline-block w-2.5 h-2.5 rounded-full" style="background-color: #aa2d00;"></span> Terlambat
                 </span>
             </div>
-            <span class="text-xs text-muted font-medium">{{ count($markers) }} locations</span>
+            <span class="text-xs text-gray-400 font-medium">{{ count($markers) }} lokasi</span>
         </div>
         <div id="attendance-map" class="w-full" style="height: 420px;"></div>
         <script id="attendance-map-data" type="application/json">@json($markers)</script>
@@ -71,51 +81,51 @@
 
     {{-- Attendance table --}}
     @if (count($markers) > 0)
-        <div class="bg-canvas rounded-lg border border-hairline overflow-hidden">
-            <div class="px-5 py-3 border-b border-hairline flex items-center justify-between">
-                <p class="text-sm font-medium text-ink">Daftar Absensi</p>
-                <span class="text-xs text-muted">{{ count($markers) }} karyawan</span>
+        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
+                <p class="text-sm font-medium text-gray-900">Daftar Absensi</p>
+                <span class="text-xs text-gray-400">{{ count($markers) }} karyawan</span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
                         <tr>
-                            <th class="px-5 py-3 text-left text-xs font-semibold text-muted uppercase tracking-wider">Karyawan</th>
-                            <th class="px-5 py-3 text-left text-xs font-semibold text-muted uppercase tracking-wider">Check-in</th>
-                            <th class="px-5 py-3 text-left text-xs font-semibold text-muted uppercase tracking-wider">Check-out</th>
-                            <th class="px-5 py-3 text-left text-xs font-semibold text-muted uppercase tracking-wider">Status</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50/50 border-b border-gray-100">Karyawan</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50/50 border-b border-gray-100">Check-in</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50/50 border-b border-gray-100">Check-out</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50/50 border-b border-gray-100">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-hairline">
+                    <tbody class="divide-y divide-gray-100">
                         @foreach($markers as $index => $attendance)
                             <tr wire:key="{{ $index }}"
-                                class="hover:bg-surface-soft cursor-pointer transition-colors"
+                                class="hover:bg-gray-50/80 cursor-pointer transition-colors"
                                 onclick="flyToMarker({{ $attendance['check_in_latitude'] }}, {{ $attendance['check_in_longitude'] }})">
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center gap-3">
-                                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-xs font-semibold text-muted uppercase">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-xs font-semibold text-gray-500 uppercase">
                                             {{ strtoupper(substr($attendance['user']['name'] ?? 'U', 0, 1)) }}
                                         </div>
-                                        <span class="font-medium text-ink">{{ $attendance['user']['name'] ?? 'Unknown' }}</span>
+                                        <span class="font-medium text-gray-900">{{ $attendance['user']['name'] ?? 'Unknown' }}</span>
                                     </div>
                                 </td>
-                                <td class="px-5 py-3.5 text-body">
+                                <td class="px-5 py-3.5 text-gray-600">
                                     {{ $attendance['check_in_time'] ? \Carbon\Carbon::parse($attendance['check_in_time'])->format('H:i') : '-' }}
                                 </td>
-                                <td class="px-5 py-3.5 text-muted">
+                                <td class="px-5 py-3.5 text-gray-400">
                                     {{ $attendance['check_out_time'] ? \Carbon\Carbon::parse($attendance['check_out_time'])->format('H:i') : '-' }}
                                 </td>
                                 <td class="px-5 py-3.5">
                                     @if($attendance['status'] === 'on_time')
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium" style="background-color: #006400; color: white;">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium text-white" style="background-color: #006400;">
                                             Tepat Waktu
                                         </span>
                                     @elseif($attendance['status'] === 'late')
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium" style="background-color: #aa2d00; color: white;">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium text-white" style="background-color: #aa2d00;">
                                             Terlambat
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium bg-gray-100 text-muted">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium bg-gray-100 text-gray-500">
                                             {{ $attendance['status'] }}
                                         </span>
                                     @endif
@@ -168,7 +178,7 @@ function initAttendanceMap() {
     attendanceMapMarkers = []
 
     if (!data || !data.length) {
-        el.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-muted gap-3"><svg class="w-10 h-10 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg><p class="text-sm font-medium">Belum ada data absensi untuk tanggal ini</p></div>'
+        el.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-gray-400 gap-3"><svg class="w-10 h-10 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg><p class="text-sm font-medium">Belum ada data absensi untuk tanggal ini</p></div>'
         return
     }
 

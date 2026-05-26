@@ -43,24 +43,644 @@
     --spacing-section: 96px;
 }
 
-/* --- Custom overrides --- */
+/* =============================================
+   Airtable-Inspired Design Overrides
+   ============================================= */
 
-.fi-sidebar { @apply bg-white border-r border-gray-200; }
-.fi-sidebar-header { @apply border-b border-gray-200; }
-.fi-sidebar-item-label { @apply text-sm font-medium text-gray-700; }
-.fi-sidebar-item-active { @apply bg-gray-50 border-r-2; }
-.fi-sidebar-group-label { @apply text-xs font-semibold text-gray-500 uppercase tracking-wider; }
-.fi-topbar { @apply bg-white border-b border-gray-200; }
-.fi-input { height: 44px; padding: 12px 16px; }
-.fi-table thead th { @apply text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50/50; }
-.fi-table tbody tr { @apply border-b border-gray-100 hover:bg-gray-50/50 transition-colors; }
-.fi-header-heading { @apply text-2xl font-normal text-gray-900 tracking-tight; }
-.fi-badge { @apply font-medium rounded-sm; }
+/* --- Layout & Page --- */
 
-.dark .fi-sidebar { @apply bg-gray-900 border-gray-800; }
-.dark .fi-sidebar-header { @apply border-gray-800; }
-.dark .fi-topbar { @apply bg-gray-900 border-gray-800; }
-.dark .fi-sidebar-item-active { @apply bg-gray-800/50; }
-.dark .fi-input { @apply bg-gray-800 border-gray-700 text-white; }
-.dark .fi-table thead th { @apply bg-gray-800/50 text-gray-400; }
-.dark .fi-table tbody tr { @apply border-gray-800 hover:bg-gray-800/50; }
+.fi-body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+.fi-layout {
+    @apply bg-gray-50;
+}
+
+.fi-main-ctn {
+    @apply bg-gray-50;
+}
+
+.fi-main {
+    @apply px-6 py-8 lg:px-10;
+}
+
+.fi-page {
+    @apply max-w-7xl mx-auto;
+}
+
+.fi-page-content {
+    @apply space-y-6;
+}
+
+.fi-page-header-main-ctn {
+    @apply mb-6;
+}
+
+/* --- Sidebar --- */
+
+.fi-sidebar {
+    @apply bg-white border-r border-gray-200;
+    width: 18rem;
+}
+
+.fi-sidebar-header {
+    @apply border-b border-gray-100 px-4 h-16 flex items-center;
+}
+
+.fi-sidebar-nav {
+    @apply px-3 py-4;
+}
+
+.fi-sidebar-item-btn {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 transition-colors;
+    @apply hover:bg-gray-100 hover:text-gray-900;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-btn {
+    @apply bg-gray-100 text-gray-900 font-semibold;
+}
+
+.fi-sidebar-item-icon {
+    @apply w-5 h-5 text-gray-400;
+    flex-shrink: 0;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-icon {
+    @apply text-gray-700;
+}
+
+.fi-sidebar-item-label {
+    @apply text-sm text-gray-600;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-label {
+    @apply text-gray-900 font-medium;
+}
+
+.fi-sidebar-group-label {
+    @apply text-xs font-semibold text-gray-400 uppercase tracking-widest px-3 py-2;
+    letter-spacing: 0.08em;
+}
+
+.fi-sidebar-group-items {
+    @apply space-y-0.5;
+}
+
+/* --- Top Bar --- */
+
+.fi-topbar {
+    @apply bg-white border-b border-gray-200 h-16 px-6;
+}
+
+.fi-topbar-start {
+    @apply text-sm font-medium text-gray-600;
+}
+
+.fi-topbar-end {
+    @apply flex items-center gap-2;
+}
+
+.fi-topbar-open-sidebar-btn,
+.fi-topbar-close-sidebar-btn {
+    @apply text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+.fi-logo {
+    @apply text-lg font-medium text-gray-900 tracking-tight;
+}
+
+/* --- Headings --- */
+
+.fi-header-heading {
+    @apply text-2xl font-normal text-gray-900 tracking-tight;
+}
+
+.fi-header {
+    @apply mb-6;
+}
+
+/* --- Cards / Sections --- */
+
+.fi-section {
+    @apply bg-white border border-gray-200 rounded-lg shadow-none;
+}
+
+.fi-section-header {
+    @apply border-b border-gray-100 px-6 py-4;
+}
+
+.fi-section-header h3 {
+    @apply text-base font-medium text-gray-900;
+}
+
+.fi-section-body {
+    @apply p-6;
+}
+
+/* --- Containers --- */
+
+.fi-widget {
+    @apply bg-white border border-gray-200 rounded-lg;
+}
+
+.fi-widget-header {
+    @apply border-b border-gray-100 px-6 py-4;
+}
+
+.fi-widget-header h3 {
+    @apply text-base font-medium text-gray-900;
+}
+
+.fi-widget-content {
+    @apply p-6;
+}
+
+/* --- Simple (Login) Layout --- */
+
+.fi-simple-layout {
+    @apply min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4;
+}
+
+.fi-simple-main-ctn {
+    @apply w-full max-w-sm;
+}
+
+.fi-simple-main {
+    @apply bg-white border border-gray-200 rounded-lg p-8;
+}
+
+.fi-simple-header {
+    @apply text-center mb-8;
+}
+
+.fi-simple-header .fi-logo {
+    @apply text-2xl font-normal text-gray-900 mb-2;
+}
+
+.fi-simple-header-heading {
+    @apply text-base font-normal text-gray-500 mt-2;
+}
+
+/* --- Form Fields --- */
+
+.fi-fo-field {
+    @apply mb-5;
+}
+
+.fi-fo-field-label {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+}
+
+.fi-fo-field-label-required-mark {
+    @apply text-red-500 ml-0.5;
+}
+
+.fi-fo-field-label-content {
+    @apply text-sm font-medium text-gray-700;
+}
+
+.fi-fo-text-input {
+    @apply relative;
+}
+
+.fi-input-wrp {
+    @apply border border-gray-300 rounded-sm transition-all duration-150;
+    @apply focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500/30;
+}
+
+.fi-input-wrp-content-ctn {
+    @apply flex items-center;
+}
+
+.fi-input {
+    height: 44px;
+    padding: 12px 16px;
+    @apply block w-full border-0 bg-transparent text-sm text-gray-900 placeholder-gray-400;
+    @apply focus:outline-none focus:ring-0;
+}
+
+.fi-input-wrp-prefix {
+    @apply pl-3 pr-0;
+}
+
+.fi-input-wrp-suffix {
+    @apply pr-1;
+}
+
+.fi-input-wrp-actions {
+    @apply flex items-center gap-1;
+}
+
+/* Buttons within input wrapper */
+.fi-input-wrp .fi-icon-btn {
+    @apply text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+/* --- Checkbox --- */
+
+.fi-checkbox-input {
+    @apply rounded-sm border-gray-300 text-gray-700;
+    @apply focus:ring-1 focus:ring-blue-500 focus:ring-offset-0;
+}
+
+/* --- Buttons --- */
+
+.fi-btn {
+    @apply inline-flex items-center justify-center font-medium transition-all duration-150 text-sm;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    border-radius: 12px;
+}
+
+.fi-btn-size-md {
+    @apply px-6 py-3;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.fi-btn-size-sm {
+    @apply px-4 py-2;
+    font-size: 13px;
+}
+
+/* Primary button */
+.fi-btn.fi-color-primary {
+    @apply text-white border-0;
+    background-color: #181d26;
+}
+
+.fi-btn.fi-color-primary:hover {
+    background-color: #0d1218;
+}
+
+.fi-btn.fi-color-primary:focus {
+    @apply ring-2 ring-offset-2;
+    --tw-ring-color: #181d26;
+}
+
+/* Submit button in forms */
+.fi-sc-actions .fi-btn[type="submit"] {
+    @apply w-full mt-2;
+    background-color: #181d26;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 12px;
+}
+
+.fi-sc-actions .fi-btn[type="submit"]:hover {
+    background-color: #0d1218;
+}
+
+/* Outline/Secondary button */
+.fi-btn.fi-color-gray {
+    @apply bg-white text-gray-700 border border-gray-300;
+}
+
+.fi-btn.fi-color-gray:hover {
+    @apply bg-gray-50 border-gray-400;
+}
+
+/* Danger button */
+.fi-btn.fi-color-danger {
+    @apply bg-white text-red-600 border border-red-200;
+}
+
+.fi-btn.fi-color-danger:hover {
+    @apply bg-red-50 border-red-300;
+}
+
+/* Icon button */
+.fi-icon-btn {
+    @apply inline-flex items-center justify-center transition-colors duration-150;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.fi-icon-btn.fi-size-sm {
+    @apply w-8 h-8 rounded-full;
+}
+
+.fi-icon-btn.fi-size-md {
+    @apply w-10 h-10 rounded-full;
+}
+
+/* Badge button */
+.fi-ac-btn-action {
+    @apply shadow-none;
+}
+
+/* --- Tables --- */
+
+.fi-table {
+    @apply w-full text-sm;
+}
+
+.fi-table thead {
+    @apply border-b border-gray-200;
+}
+
+.fi-table thead th {
+    @apply px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50/50;
+    @apply border-b border-gray-100;
+}
+
+.fi-table tbody tr {
+    @apply border-b border-gray-100 transition-colors;
+}
+
+.fi-table tbody tr:hover {
+    @apply bg-gray-50/80;
+}
+
+.fi-table tbody td {
+    @apply px-5 py-3.5 text-sm text-gray-700;
+}
+
+/* --- Badges --- */
+
+.fi-badge {
+    @apply inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-sm;
+}
+
+.fi-badge-color-success {
+    @apply bg-green-50 text-green-700;
+}
+
+.fi-badge-color-danger {
+    @apply bg-red-50 text-red-700;
+}
+
+.fi-badge-color-warning {
+    @apply bg-yellow-50 text-yellow-800;
+}
+
+.fi-badge-color-info {
+    @apply bg-blue-50 text-blue-700;
+}
+
+.fi-badge-color-gray {
+    @apply bg-gray-100 text-gray-600;
+}
+
+/* --- Dropdowns --- */
+
+.fi-dropdown-panel {
+    @apply bg-white border border-gray-200 rounded-lg shadow-lg min-w-48;
+}
+
+.fi-dropdown-header {
+    @apply flex items-center gap-3 px-4 py-3 border-b border-gray-100;
+}
+
+.fi-dropdown-header span {
+    @apply text-sm font-medium text-gray-900;
+}
+
+.fi-dropdown-list-item {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 transition-colors;
+    @apply hover:bg-gray-50 hover:text-gray-900;
+}
+
+.fi-dropdown-list-item svg {
+    @apply w-5 h-5 text-gray-400;
+}
+
+/* --- Theme Switcher --- */
+
+.fi-theme-switcher {
+    @apply flex items-center gap-1 px-4 py-3 border-b border-gray-100;
+}
+
+.fi-theme-switcher-btn {
+    @apply p-2 rounded-full text-gray-400 transition-colors;
+    @apply hover:text-gray-600 hover:bg-gray-100;
+}
+
+.fi-theme-switcher-btn.fi-active {
+    @apply text-gray-900 bg-gray-100;
+}
+
+/* --- User Menu --- */
+
+.fi-user-menu-trigger {
+    @apply rounded-full transition-opacity hover:opacity-80;
+}
+
+.fi-user-avatar {
+    @apply w-9 h-9 rounded-full;
+}
+
+/* --- Tabs --- */
+
+.fi-tabs {
+    @apply border-b border-gray-200;
+}
+
+.fi-tabs-item {
+    @apply inline-flex items-center px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent;
+    @apply hover:text-gray-700 hover:border-gray-300 transition-all;
+}
+
+.fi-tabs-item-active {
+    @apply text-gray-900 border-gray-900;
+}
+
+/* --- Notification --- */
+
+.fi-no {
+    @apply fixed top-4 right-4 z-50;
+}
+
+/* --- Global Search --- */
+
+.fi-global-search-field .fi-input {
+    height: 36px;
+    padding: 8px 12px;
+    @apply text-sm;
+}
+
+.fi-global-search-field .fi-input-wrp {
+    @apply border-gray-200 rounded-lg;
+}
+
+/* --- Pagination --- */
+
+.fi-pagination {
+    @apply flex items-center justify-between px-6 py-3 border-t border-gray-100;
+}
+
+.fi-pagination button {
+    @apply px-3 py-1.5 text-sm text-gray-600 rounded-md transition-colors;
+    @apply hover:bg-gray-100 hover:text-gray-900;
+}
+
+.fi-pagination .fi-pagination-active {
+    @apply bg-gray-900 text-white;
+    @apply hover:bg-gray-800;
+}
+
+/* --- Widgets --- */
+
+.fi-widget {
+    @apply bg-white border border-gray-200 rounded-lg;
+}
+
+.fi-widget-header {
+    @apply border-b border-gray-100 px-5 py-4;
+}
+
+.fi-widget-header h3 {
+    @apply text-sm font-medium text-gray-900;
+}
+
+/* --- Action Modals --- */
+
+.fi-modal-window {
+    @apply bg-white border border-gray-200 rounded-lg shadow-xl;
+}
+
+.fi-modal-header {
+    @apply px-6 py-4 border-b border-gray-100;
+}
+
+.fi-modal-header h2 {
+    @apply text-lg font-medium text-gray-900;
+}
+
+.fi-modal-body {
+    @apply px-6 py-4;
+}
+
+.fi-modal-footer {
+    @apply px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3;
+}
+
+/* =============================================
+   Dark Mode
+   ============================================= */
+
+.dark .fi-body {
+    @apply bg-gray-950 text-gray-100;
+}
+
+.dark .fi-layout,
+.dark .fi-main-ctn,
+.dark .fi-main {
+    @apply bg-gray-950;
+}
+
+.dark .fi-sidebar {
+    @apply bg-gray-900 border-gray-800;
+}
+
+.dark .fi-sidebar-header {
+    @apply border-gray-800;
+}
+
+.dark .fi-topbar {
+    @apply bg-gray-900 border-gray-800;
+}
+
+.dark .fi-sidebar-item-btn {
+    @apply text-gray-400 hover:bg-gray-800 hover:text-gray-200;
+}
+
+.dark .fi-sidebar-item-active .fi-sidebar-item-btn {
+    @apply bg-gray-800 text-gray-200;
+}
+
+.dark .fi-sidebar-item-icon {
+    @apply text-gray-500;
+}
+
+.dark .fi-sidebar-item-active .fi-sidebar-item-icon {
+    @apply text-gray-300;
+}
+
+.dark .fi-sidebar-item-label {
+    @apply text-gray-400;
+}
+
+.dark .fi-sidebar-item-active .fi-sidebar-item-label {
+    @apply text-gray-200;
+}
+
+.dark .fi-sidebar-group-label {
+    @apply text-gray-500;
+}
+
+.dark .fi-section,
+.dark .fi-widget,
+.dark .fi-simple-main {
+    @apply bg-gray-900 border-gray-800;
+}
+
+.dark .fi-section-header,
+.dark .fi-widget-header,
+.dark .fi-table thead {
+    @apply border-gray-800;
+}
+
+.dark .fi-table thead th {
+    @apply bg-gray-800/50 text-gray-400;
+}
+
+.dark .fi-table tbody tr {
+    @apply border-gray-800 hover:bg-gray-800/50;
+}
+
+.dark .fi-table tbody td {
+    @apply text-gray-300;
+}
+
+.dark .fi-input-wrp {
+    @apply border-gray-700;
+}
+
+.dark .fi-input {
+    @apply bg-gray-800 text-white placeholder-gray-500;
+}
+
+.dark .fi-header-heading {
+    @apply text-gray-100;
+}
+
+.dark .fi-logo {
+    @apply text-gray-100;
+}
+
+.dark .fi-fo-field-label-content {
+    @apply text-gray-300;
+}
+
+.dark .fi-dropdown-panel {
+    @apply bg-gray-900 border-gray-800;
+}
+
+.dark .fi-dropdown-list-item {
+    @apply text-gray-300 hover:bg-gray-800 hover:text-gray-100;
+}
+
+.dark .fi-modal-window {
+    @apply bg-gray-900 border-gray-800;
+}
+
+.dark .fi-modal-header,
+.dark .fi-modal-footer {
+    @apply border-gray-800;
+}
+
+.dark .fi-pagination {
+    @apply border-gray-800;
+}
+
+.dark .fi-pagination button {
+    @apply text-gray-400 hover:bg-gray-800 hover:text-gray-200;
+}
+
+.dark .fi-simple-layout {
+    @apply bg-gray-950;
+}
